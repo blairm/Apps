@@ -1,0 +1,90 @@
+<LinearLayout	xmlns:android="http://schemas.android.com/apk/res/android"
+				xmlns:tools="http://schemas.android.com/tools"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:orientation="vertical"
+				android:paddingLeft="@dimen/activity_horizontal_margin"
+				android:paddingRight="@dimen/activity_horizontal_margin"
+				android:paddingTop="@dimen/activity_vertical_margin"
+				android:paddingBottom="@dimen/activity_vertical_margin"
+				tools:context=".MainActivity"
+				android:weightSum="2">
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:text="@string/default_time"
+			android:id="@+id/timeText"
+			android:layout_centerVertical="true"
+			android:layout_centerHorizontal="true"
+			android:textSize="@dimen/activity_time_text_size"/>
+
+	</RelativeLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:weightSum="2"
+		style="@style/Base.Widget.AppCompat.ButtonBar"
+		android:layout_weight="0">
+
+		<Button
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/start_button"
+			android:id="@+id/buttonStart"
+			android:layout_weight="1"
+			style="@style/Base.Widget.AppCompat.Button"/>
+
+		<Button
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/set_time_button"
+			android:id="@+id/buttonSetTime"
+			android:layout_weight="1"
+			style="@style/Base.Widget.AppCompat.Button"/>
+	</LinearLayout>
+
+	<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:weightSum="3"
+			android:layout_weight="0">
+
+		<TextView
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceLarge"
+				android:text="@string/recent_timers_title"
+				android:id="@+id/recentTimerTitle"
+				android:layout_centerVertical="true"
+				android:layout_centerHorizontal="true"
+				android:textSize="@dimen/activity_recent_timers_title_size"
+				android:layout_weight="1"
+				android:paddingLeft="@dimen/activity_recent_timers_title_margin"/>
+
+			<Button
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/clear_button"
+				android:id="@+id/buttonClear"
+				android:textSize="@dimen/activity_clear_button_size"
+				android:layout_weight="2"
+				style="@style/Base.Widget.AppCompat.Button"/>
+	</LinearLayout>
+
+	<ListView
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:id="@+id/timeList"
+		android:layout_gravity="center_horizontal"
+		android:layout_weight="1"/>
+</LinearLayout>

@@ -1,0 +1,15 @@
+<resources>
+
+	<!-- Base application theme. -->
+	<style name="AppTheme" parent="Theme.AppCompat">
+	</style>
+
+	<style name="AlertDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+		<!-- Used for the buttons -->
+		<item name="colorAccent">#ffffff</item>
+		<!-- Used to wrap dialog content -->
+		<item name="windowMinWidthMajor">0dp</item>
+		<item name="windowMinWidthMinor">0dp</item>
+	</style>
+
+</resources>

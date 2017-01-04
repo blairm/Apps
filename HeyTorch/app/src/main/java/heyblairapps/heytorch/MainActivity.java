@@ -27,9 +27,9 @@ public class MainActivity extends ActionBarActivity
 
     public boolean onTouchEvent( MotionEvent event )
     {
-        int eventaction = event.getAction();
+        int eventAction = event.getAction();
 
-        if( eventaction == MotionEvent.ACTION_UP )
+        if( eventAction == MotionEvent.ACTION_UP )
         {
 			//doing this here makes the torch image go on or off
 			//quicker than waiting for the broadcast receiver

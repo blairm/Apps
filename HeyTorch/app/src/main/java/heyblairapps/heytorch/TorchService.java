@@ -2,12 +2,17 @@ package heyblairapps.heytorch;
 
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.hardware.Camera.Parameters;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 
 public class TorchService extends Service
 {
@@ -22,7 +27,8 @@ public class TorchService extends Service
 	@Override
 	public void onCreate()
 	{
-		camera = Camera.open();
+		if( android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M )
+			camera = Camera.open();
 	}
 
 	@Override
@@ -30,10 +36,13 @@ public class TorchService extends Service
 	{
 		setTorchOff();
 
-		if( camera != null )
+		if( android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.M )
 		{
-			camera.release();
-			camera = null;
+			if( camera != null )
+			{
+				camera.release();
+				camera = null;
+			}
 		}
 	}
 
@@ -63,12 +72,28 @@ public class TorchService extends Service
 	{
 		torchOn = false;
 
-		if( camera != null )
+		if( android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M )
 		{
-			camera.stopPreview();
-			Parameters camParams = camera.getParameters();
-			camParams.setFlashMode( Parameters.FLASH_MODE_OFF );
-			camera.setParameters( camParams );
+			try
+			{
+				CameraManager cameraManager = ( CameraManager ) getSystemService( Context.CAMERA_SERVICE );
+				String[] idList = cameraManager.getCameraIdList();
+				cameraManager.setTorchMode( idList[0], false );
+			}
+			catch( Exception exception )
+			{
+				Log.e( getString( R.string.app_name ), exception.getMessage() );
+			}
+		}
+		else
+		{
+			if( camera != null )
+			{
+				camera.stopPreview();
+				Parameters camParams = camera.getParameters();
+				camParams.setFlashMode( Parameters.FLASH_MODE_OFF );
+				camera.setParameters( camParams );
+			}
 		}
 
 		Intent activityIntent = new Intent();
@@ -87,12 +112,28 @@ public class TorchService extends Service
 	{
 		torchOn = true;
 
-		if( camera != null )
+		if( android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M )
 		{
-			Parameters camParams = camera.getParameters();
-			camParams.setFlashMode( Parameters.FLASH_MODE_TORCH );
-			camera.setParameters(camParams);
-			camera.startPreview();
+			try
+			{
+				CameraManager cameraManager = ( CameraManager ) getSystemService( Context.CAMERA_SERVICE );
+				String[] idList = cameraManager.getCameraIdList();
+				cameraManager.setTorchMode( idList[0], true );
+			}
+			catch( Exception exception )
+			{
+				Log.e( getString( R.string.app_name ), exception.getMessage() );
+			}
+		}
+		else
+		{
+			if( camera != null )
+			{
+				Parameters camParams = camera.getParameters();
+				camParams.setFlashMode( Parameters.FLASH_MODE_TORCH );
+				camera.setParameters(camParams);
+				camera.startPreview();
+			}
 		}
 
 		Intent intent = new Intent( this, TorchWidgetProvider.class );

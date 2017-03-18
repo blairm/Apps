@@ -11,14 +11,15 @@
 			  android:weightSum="2"
 			  android:baselineAligned="false"
 			  android:divider="#585858"
-			  android:showDividers="middle">
+			  android:showDividers="none">
 
 	<LinearLayout
 		android:orientation="vertical"
 		android:layout_width="0dp"
 		android:layout_height="match_parent"
 		android:layout_weight="1"
-		android:gravity="bottom">
+		android:gravity="bottom"
+		android:paddingRight="8dp">
 
 		<RelativeLayout
 			android:layout_width="fill_parent"
@@ -61,6 +62,7 @@
 				android:id="@+id/buttonReset"
 				android:layout_weight="1"
 				style="@style/Base.Widget.AppCompat.Button"/>
+
 		</LinearLayout>
 	</LinearLayout>
 
@@ -69,6 +71,7 @@
 		android:layout_height="match_parent"
 		android:id="@+id/lapList"
 		android:layout_gravity="end"
-		android:layout_weight="1"/>
+		android:layout_weight="1"
+		android:paddingLeft="8dp" />
 
 </LinearLayout>

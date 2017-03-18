@@ -1,25 +1,36 @@
 apply plugin: 'com.android.application'
 
 android {
+	signingConfigs {
+		config {
+		}
+	}
 	compileSdkVersion 22
-	buildToolsVersion "23.0.2"
-
+	buildToolsVersion '25.0.0'
 	defaultConfig {
 		applicationId "heyblairapps.heystopwatch"
 		minSdkVersion 18
 		targetSdkVersion 22
-		versionCode 1
-		versionName "1.0"
+		versionCode 2
+		versionName "1.1"
+		signingConfig signingConfigs.config
 	}
 	buildTypes {
 		release {
 			minifyEnabled true
 			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+			debuggable false
+			jniDebuggable false
+			signingConfig signingConfigs.config
+			renderscriptDebuggable false
+			zipAlignEnabled true
 		}
+	}
+	productFlavors {
 	}
 }
 
 dependencies {
-	compile fileTree(dir: 'libs', include: ['*.jar'])
+	compile fileTree(include: ['*.jar'], dir: 'libs')
 	compile 'com.android.support:appcompat-v7:22.2.1'
 }

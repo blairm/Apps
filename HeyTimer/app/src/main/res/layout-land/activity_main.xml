@@ -11,14 +11,15 @@
 				android:weightSum="2"
 				android:baselineAligned="false"
 				android:divider="#585858"
-				android:showDividers="middle">
+				android:showDividers="none">
 
 	<LinearLayout
 		android:orientation="vertical"
 		android:layout_width="0dp"
 		android:layout_height="match_parent"
 		android:layout_weight="1"
-		android:gravity="bottom">
+		android:gravity="bottom"
+		android:paddingRight="8dp">
 
 		<RelativeLayout
 			android:layout_width="fill_parent"
@@ -69,7 +70,8 @@
 			android:layout_width="0dp"
 			android:layout_height="match_parent"
 			android:layout_weight="1"
-			android:gravity="top">
+			android:gravity="top"
+			android:paddingLeft="8dp">
 		<LinearLayout
 					android:orientation="horizontal"
 					android:layout_width="fill_parent"

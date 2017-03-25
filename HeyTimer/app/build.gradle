@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
 	compileSdkVersion 22
-	buildToolsVersion "23.0.2"
+	buildToolsVersion '25.0.0'
 
 	defaultConfig {
 		applicationId "heyblairapps.heytimer"
 		minSdkVersion 18
 		targetSdkVersion 22
-		versionCode 1
-		versionName "1.0"
+		versionCode 2
+		versionName "1.1"
 	}
 	buildTypes {
 		release {

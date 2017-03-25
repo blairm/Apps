@@ -5,10 +5,13 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.support.v7.app.NotificationCompat;
@@ -99,6 +102,21 @@ public class TimerService extends Service implements Choreographer.FrameCallback
 
 			if( alarmURI != null )
 				alarm = RingtoneManager.getRingtone( getApplicationContext(), alarmURI );
+		}
+
+		if( alarm != null )
+		{
+			if( android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP )
+			{
+				AudioAttributes.Builder builder = new AudioAttributes.Builder();
+				builder.setUsage( AudioAttributes.USAGE_ALARM );
+				AudioAttributes attributes = builder.build();
+				alarm.setAudioAttributes( attributes );
+			}
+			else
+			{
+				alarm.setStreamType( AudioManager.STREAM_ALARM );
+			}
 		}
 		//*/
 	}

@@ -1,0 +1,5 @@
+<resources>
+    <dimen name="user_message_size">35sp</dimen>
+    <dimen name="max_speed_text_size">140dp</dimen>
+    <dimen name="unit_text_size">35sp</dimen>
+</resources>

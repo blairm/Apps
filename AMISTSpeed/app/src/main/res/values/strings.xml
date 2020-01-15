@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">AMIST Speed</string>
+
+    <string name="user_message_getting_location">Getting location</string>
+    <string name="user_message_require_permission">AMIST Speed requires the Location permission to function</string>
+    <string name="user_message_enable_location">AMIST Speed requires Location to be enabled</string>
+
+    <string name="unit_text_mph">MPH</string>
+    <string name="unit_text_kph">KPH</string>
+    <string name="unit_text_kn">Kn</string>
+</resources>

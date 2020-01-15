@@ -1,10 +1,13 @@
 # Apps
 
-# HeyTorch
-Android torch app
+# AMISTSpeed
+Android speedometer app
 
-# HeyStopwatch
+# AMISTStopwatch
 Android stopwatch app
 
-# HeyTimer
+# AMISTTimer
 Android timer app
+
+# AMISTTorch
+Android torch app

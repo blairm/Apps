@@ -1,0 +1,10 @@
+<resources>
+	<string name="app_name">AMIST Torch</string>
+    <string name="torch_button">torch</string>
+    <string name="flashlight_permission_name">flashlight</string>
+    <string name="flashlight_permission_description">flashlight</string>
+	<string name="dialog_title_error">Error</string>
+    <string name="no_flashlight_message">No flashlight detected</string>
+    <string name="quit">Quit</string>
+    <string name="notification_text">Tap to turn off</string>
+</resources>

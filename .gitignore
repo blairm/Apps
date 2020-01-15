@@ -47,4 +47,14 @@ Temporary Items
 .apdisk
 
 #custom
-/play store stuff
+*.iml
+.idea
+.gradle
+*/local.properties
+*/build
+*/captures
+.externalNativeBuild
+.cxx
+*.aab
+*.apk
+*.sublime-workspace

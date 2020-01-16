@@ -352,6 +352,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			startService( intent );
 		}
 
+		pickedTime = TimerService.getPickedTime();
 		timeText.setText( getTimeString( TimerService.timeLeft ) );
 
 		updateList();

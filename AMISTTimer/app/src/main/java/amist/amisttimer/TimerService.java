@@ -16,6 +16,7 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.Choreographer;
 
 public class TimerService extends Service implements Choreographer.FrameCallback
@@ -64,6 +65,11 @@ public class TimerService extends Service implements Choreographer.FrameCallback
 
 		timeLeft	= Math.max( pickedTime - totalTime, 0 );
 	}
+
+	public static Long getPickedTime()
+	{
+		return pickedTime;
+	}
 	
 	public static void reset()
 	{
@@ -92,6 +98,8 @@ public class TimerService extends Service implements Choreographer.FrameCallback
 		running		= false;
 		startTime	= 0;
 		totalTime	= 0;
+
+		pickedTime	= 0;
 
 		//*get default alarm sound, if null, get ringtone sound, if null, cry
 		Uri alarmURI = RingtoneManager.getDefaultUri( RingtoneManager.TYPE_ALARM );
@@ -135,7 +143,10 @@ public class TimerService extends Service implements Choreographer.FrameCallback
 			{
 				notificationManager.createNotificationChannel( notificationChannel );
 			}
-			catch( NullPointerException exception ) {}
+			catch( Exception exception )
+			{
+				Log.i( getString( R.string.app_name ), exception.toString() );
+			}
 		}
 	}
 
@@ -196,7 +207,17 @@ public class TimerService extends Service implements Choreographer.FrameCallback
 	{
 		builder.setContentText( MainActivity.getTimeString( timeLeft ) );
 		NotificationManager notificationManager = ( NotificationManager ) getSystemService( Context.NOTIFICATION_SERVICE );
-		notificationManager.notify( 1, builder.build() );
+		
+		try
+		{
+			//when run as an instant app this can crash the app on some devices, catching the
+			//exception appears to allow you to still update the notification on these devices
+			notificationManager.notify( 1, builder.build() );
+		}
+		catch( Exception exception )
+		{
+			Log.i( getString( R.string.app_name ), exception.toString() );
+		}
 	}
 
 	public void destroyNotification()

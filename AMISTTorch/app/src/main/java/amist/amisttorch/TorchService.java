@@ -46,7 +46,10 @@ public class TorchService extends Service
 			{
 				notificationManager.createNotificationChannel( notificationChannel );
 			}
-			catch( NullPointerException exception ) {}
+			catch( Exception exception )
+			{
+				Log.i( getString( R.string.app_name ), exception.toString() );
+			}
 		}
 	}
 
@@ -172,7 +175,13 @@ public class TorchService extends Service
 
 		Intent notificationIntent = new Intent( this, TorchService.class );
 
-		PendingIntent pendingIntent = PendingIntent.getService( this, 0, notificationIntent, 0 );
+		PendingIntent pendingIntent;
+
+		if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O )
+			pendingIntent = PendingIntent.getForegroundService( this, 0, notificationIntent, 0 );
+		else
+			pendingIntent = PendingIntent.getService( this, 0, notificationIntent, 0 );
+
 		builder.setContentIntent( pendingIntent );
 		startForeground( 1, builder.build() );
 	}

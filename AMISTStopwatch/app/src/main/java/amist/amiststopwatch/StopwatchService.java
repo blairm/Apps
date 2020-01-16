@@ -11,6 +11,7 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.Choreographer;
 
 import java.util.ArrayList;
@@ -87,7 +88,10 @@ public class StopwatchService extends Service implements Choreographer.FrameCall
 			{
 				notificationManager.createNotificationChannel( notificationChannel );
 			}
-			catch( NullPointerException exception ) {}
+			catch( Exception exception )
+			{
+				Log.i( getString( R.string.app_name ), exception.toString() );
+			}
 		}
 	}
 
@@ -144,7 +148,17 @@ public class StopwatchService extends Service implements Choreographer.FrameCall
 	{
 		builder.setContentText( MainActivity.getTimeString( totalTime ) );
 		NotificationManager notificationManager = ( NotificationManager ) getSystemService( Context.NOTIFICATION_SERVICE );
-		notificationManager.notify( 1, builder.build() );
+
+		try
+		{
+			//when run as an instant app this can crash the app on some devices, catching the
+			//exception appears to allow you to still update the notification on these devices
+			notificationManager.notify( 1, builder.build() );
+		}
+		catch( Exception exception )
+		{
+			Log.i( getString( R.string.app_name ), exception.toString() );
+		}
 	}
 
 	public void destroyNotification()

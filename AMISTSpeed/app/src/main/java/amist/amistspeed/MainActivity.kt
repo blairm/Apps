@@ -195,7 +195,9 @@ class MainActivity : AppCompatActivity()
     {
         super.onStop();
 
-        locationManager.removeUpdates( locationListener );
+        if( locationPermissionGranted )
+            locationManager.removeUpdates( locationListener );
+        
         locationUpdatesRequested = false;
     }
 

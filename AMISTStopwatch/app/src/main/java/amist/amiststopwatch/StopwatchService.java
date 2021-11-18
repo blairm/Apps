@@ -25,10 +25,10 @@ public class StopwatchService extends Service implements Choreographer.FrameCall
 
 	public static Notification.Builder 	builder;
 
-	public static boolean				running;
-	public static long					startTime;
-	public static long					totalTime;
-	public static ArrayList< Long >		lapTimeList;
+	public static boolean				running		= false;
+	public static long					startTime	= 0;
+	public static long					totalTime	= 0;
+	public static ArrayList< Long >		lapTimeList	= new ArrayList< Long >();
 
 	public static void toggleStart()
 	{
@@ -69,12 +69,7 @@ public class StopwatchService extends Service implements Choreographer.FrameCall
 	@Override
 	public void onCreate()
 	{
-		instance	= this;
-
-		running		= false;
-		startTime	= 0;
-		totalTime	= 0;
-		lapTimeList	= new ArrayList< Long >();
+		instance = this;
 
 		if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O )
 		{
@@ -98,10 +93,8 @@ public class StopwatchService extends Service implements Choreographer.FrameCall
 	@Override
 	public void onDestroy()
 	{
-		instance	= null;
-
-		running		= false;
-		lapTimeList	= null;
+		reset();
+		instance = null;
 
 		Choreographer.getInstance().removeFrameCallback( this );
 

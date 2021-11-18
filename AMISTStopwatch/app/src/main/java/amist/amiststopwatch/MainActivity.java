@@ -1,9 +1,8 @@
 package amist.amiststopwatch;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.Manifest;
 import android.os.Bundle;
 import android.view.Choreographer;
 import android.view.View;
@@ -14,13 +13,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, Choreographer.FrameCallback
 {
+	public final String LAP_TIME_COUNT_ID	= "lapTimeCount";
+	public final String LAP_TIME_ID			= "lapTime";
+	public final String TOTAL_TIME_ID		= "totalTime";
+
+
 	public static String getTimeString( Long ms )
 	{
 		Long s	= ( ms / 1000 ) % 60;
@@ -119,6 +121,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		buttonStart.setOnClickListener( this );
 		buttonReset	= ( Button ) findViewById( R.id.buttonReset );
 		buttonReset.setOnClickListener( this );
+
+		//*check for saved lap times and total time, load if found
+		SharedPreferences preferences = getPreferences( MODE_PRIVATE );
+		if( preferences != null )
+		{
+
+			int count = preferences.getInt( LAP_TIME_COUNT_ID, 0 );
+			for( int i = 0; i < count; ++i )
+			{
+				long value = preferences.getLong( LAP_TIME_ID + i, 0 );
+				savedLapTimeList.add( value );
+			}
+
+			savedTotalTime = preferences.getLong( TOTAL_TIME_ID, 0 );
+		}
+		//*/
 	}
 
 	@Override
@@ -141,10 +159,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	{
 		super.onPause();
 		
-		if( !StopwatchService.running && StopwatchService.totalTime == 0 )
+		if( !StopwatchService.running )
 		{
-			Intent intent = new Intent( this, StopwatchService.class );
-			stopService( intent );
+			if( StopwatchService.totalTime == 0 )
+			{
+				Intent intent = new Intent( this, StopwatchService.class );
+				stopService( intent );
+			}
+			else
+			{
+				//*save lap times and total time
+				SharedPreferences preferences = getPreferences( MODE_PRIVATE );
+				if( preferences != null )
+				{
+					SharedPreferences.Editor editor = preferences.edit();
+					if( editor != null )
+					{
+						int count = StopwatchService.lapTimeList.size();
+						editor.putInt( LAP_TIME_COUNT_ID, count );
+
+						for( int i = 0; i < count; ++i )
+							editor.putLong( LAP_TIME_ID + i, StopwatchService.lapTimeList.get( i ) );
+
+						editor.putLong( TOTAL_TIME_ID, StopwatchService.totalTime );
+
+						editor.commit();
+					}
+				}
+				//*/
+			}
 		}
 
 		Choreographer.getInstance().removeFrameCallback( this );
@@ -155,12 +198,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	private Button				buttonStart;
 	private Button				buttonReset;
 
+	private ArrayList< Long >	savedLapTimeList	= new ArrayList< Long >();
+	private long				savedTotalTime		= 0;
+
 	private void updateActivity()
 	{
 		if( StopwatchService.instance == null )
 		{
 			Intent intent = new Intent( this, StopwatchService.class );
 			startService( intent );
+
+			for( int i = 0; i < savedLapTimeList.size(); ++i )
+				StopwatchService.lapTimeList.add( savedLapTimeList.get( i ) );
+
+			StopwatchService.totalTime = savedTotalTime;
 		}
 
 		updateList();
@@ -179,10 +230,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 	private void updateList()
 	{
-		int lapCount = 0;
-		
-		if( StopwatchService.instance != null )
-			lapCount = StopwatchService.lapTimeList.size();
+		int lapCount = StopwatchService.lapTimeList.size();
 
 		ArrayList< String > lapList = new ArrayList< String >();
 

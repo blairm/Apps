@@ -54,8 +54,7 @@ public class TimerService extends Service implements Choreographer.FrameCallback
 
 			instance.destroyNotification();
 
-			if( alarm != null )
-				alarm.stop();
+			instance.stopAlarm();
 		}
 	}
 
@@ -70,36 +69,43 @@ public class TimerService extends Service implements Choreographer.FrameCallback
 	{
 		return pickedTime;
 	}
+
+	public static void setVolume( int newVolume )
+	{
+		volume = newVolume;
+
+		if( instance != null )
+			instance.setStreamVolumeIfPlaying();
+	}
+
+	public static int getVolume()
+	{
+		return volume;
+	}
 	
 	public static void reset()
 	{
 		running		= false;
+
 		totalTime	= 0;
 		timeLeft	= 0;
 
 		pickedTime	= 0;
 	}
 
-	public static void loopAlarm()
-	{
-		if( running && timeLeft <= 0 )
-		{
-			if( alarm != null && !alarm.isPlaying() )
-				alarm.play();
-		}
-	}
-
 
 	@Override
 	public void onCreate()
 	{
-		instance	= this;
+		instance		= this;
 
-		running		= false;
-		startTime	= 0;
-		totalTime	= 0;
+		running			= false;
+		isAlarmPlaying	= false;
 
-		pickedTime	= 0;
+		startTime		= 0;
+		totalTime		= 0;
+
+		pickedTime		= 0;
 
 		//*get default alarm sound, if null, get ringtone sound, if null, cry
 		Uri alarmURI = RingtoneManager.getDefaultUri( RingtoneManager.TYPE_ALARM );
@@ -131,6 +137,16 @@ public class TimerService extends Service implements Choreographer.FrameCallback
 		}
 		//*/
 
+
+		audioManager	= ( AudioManager ) getSystemService( Context.AUDIO_SERVICE );
+		maxVolume		= audioManager.getStreamMaxVolume( AudioManager.STREAM_ALARM );
+
+		if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.P )
+			minVolume = audioManager.getStreamMinVolume( AudioManager.STREAM_ALARM );
+		else
+			minVolume = 0;
+
+
 		if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O )
 		{
 			NotificationChannel notificationChannel = new NotificationChannel( NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_ID, NotificationManager.IMPORTANCE_LOW );
@@ -153,16 +169,16 @@ public class TimerService extends Service implements Choreographer.FrameCallback
 	@Override
 	public void onDestroy()
 	{
-		instance	= null;
+		instance		= null;
 
-		running		= false;
+		running			= false;
+		isAlarmPlaying	= false;
 
 		Choreographer.getInstance().removeFrameCallback( this );
 
 		destroyNotification();
 
-		if( alarm != null )
-			alarm.stop();
+		stopAlarm();
 
 		alarm = null;
 	}
@@ -238,19 +254,35 @@ public class TimerService extends Service implements Choreographer.FrameCallback
 		{
 			timeLeft = 0;
 
-			Intent serviceIntent = new Intent( this, MainActivity.class );
-			serviceIntent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP );
-			startActivity( serviceIntent );
+			if( !isAlarmPlaying )
+			{
+				Intent serviceIntent = new Intent( this, MainActivity.class );
+				serviceIntent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP );
+				startActivity( serviceIntent );
 
-			if( alarm != null )
+				defaultVolume = audioManager.getStreamVolume( AudioManager.STREAM_ALARM );
+				setStreamVolume( volume );
+			}
+
+			volume = audioManager.getStreamVolume( AudioManager.STREAM_ALARM );
+
+			if( alarm != null && !alarm.isPlaying() )
+			{
 				alarm.play();
+				isAlarmPlaying = true;
+			}
 		}
-		else if( running )
-		{
+		
+		if( running )
 			Choreographer.getInstance().postFrameCallback( this );
-		}
 
 		updateNotification();
+	}
+
+	public void setStreamVolumeIfPlaying()
+	{
+		if( isAlarmPlaying )
+			setStreamVolume( volume );
 	}
 
 
@@ -259,4 +291,36 @@ public class TimerService extends Service implements Choreographer.FrameCallback
 	private static long pickedTime;
 
 	private static Ringtone alarm;
+	private boolean isAlarmPlaying;
+
+
+	private AudioManager audioManager;
+	private static int volume;
+	private int	defaultVolume;
+	private int	maxVolume;
+	private int	minVolume;
+
+
+	private void stopAlarm()
+	{
+		if( alarm != null )
+		{
+			alarm.stop();
+			isAlarmPlaying = false;
+
+			setStreamVolume( defaultVolume );
+		}
+	}
+
+	private void setStreamVolume( int volume )
+	{
+		try
+		{
+			audioManager.setStreamVolume( AudioManager.STREAM_ALARM, volume, 0 );
+		}
+		catch( Exception exception )
+		{
+			Log.i( getString( R.string.app_name ), exception.toString() );
+		}
+	}
 }

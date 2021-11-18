@@ -11,4 +11,6 @@
 	<string name="negative_text">Cancel</string>
 	<string name="recent_timers_title">Recent Timers</string>
 	<string name="clear_button">Clear</string>
+	<string name="set_volume">Set Volume</string>
+	<string name="volume_picker_title">Set Volume</string>
 </resources>

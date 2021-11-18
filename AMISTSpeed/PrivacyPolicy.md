@@ -1,4 +1,4 @@
-This privacy policy governs your use of the software application AMIST Speed (“Application”) for mobile devices that was created by AMIST. The Application allows you to turn on and off the flashlight of your mobile devices.
+This privacy policy governs your use of the software application AMIST Speed (“Application”) for mobile devices that was created by AMIST. The Application allows you to measure the speed of the device using its in built GPS hardware.
 
 # What information does the Application obtain and how is it used?
 

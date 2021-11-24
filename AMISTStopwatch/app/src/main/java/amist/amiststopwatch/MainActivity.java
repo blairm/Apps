@@ -126,7 +126,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		SharedPreferences preferences = getPreferences( MODE_PRIVATE );
 		if( preferences != null )
 		{
-
 			int count = preferences.getInt( LAP_TIME_COUNT_ID, 0 );
 			for( int i = 0; i < count; ++i )
 			{
@@ -161,33 +160,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		
 		if( !StopwatchService.running )
 		{
-			if( StopwatchService.totalTime == 0 )
+			Intent intent = new Intent( this, StopwatchService.class );
+			stopService( intent );
+
+			//*save lap times and total time
+			SharedPreferences preferences = getPreferences( MODE_PRIVATE );
+			if( preferences != null )
 			{
-				Intent intent = new Intent( this, StopwatchService.class );
-				stopService( intent );
-			}
-			else
-			{
-				//*save lap times and total time
-				SharedPreferences preferences = getPreferences( MODE_PRIVATE );
-				if( preferences != null )
+				SharedPreferences.Editor editor = preferences.edit();
+				if( editor != null )
 				{
-					SharedPreferences.Editor editor = preferences.edit();
-					if( editor != null )
-					{
-						int count = StopwatchService.lapTimeList.size();
-						editor.putInt( LAP_TIME_COUNT_ID, count );
+					int count = StopwatchService.lapTimeList.size();
+					editor.putInt( LAP_TIME_COUNT_ID, count );
 
-						for( int i = 0; i < count; ++i )
-							editor.putLong( LAP_TIME_ID + i, StopwatchService.lapTimeList.get( i ) );
+					for( int i = 0; i < count; ++i )
+						editor.putLong( LAP_TIME_ID + i, StopwatchService.lapTimeList.get( i ) );
 
-						editor.putLong( TOTAL_TIME_ID, StopwatchService.totalTime );
+					editor.putLong( TOTAL_TIME_ID, StopwatchService.totalTime );
 
-						editor.commit();
-					}
+					editor.commit();
 				}
-				//*/
 			}
+			//*/
 		}
 
 		Choreographer.getInstance().removeFrameCallback( this );

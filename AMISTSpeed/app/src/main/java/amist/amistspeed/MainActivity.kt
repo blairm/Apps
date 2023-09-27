@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity()
     lateinit var locationManager:LocationManager;
     var locationListener:LocationListener = object:LocationListener
     {
-        override fun onLocationChanged( location:Location)
+        override fun onLocationChanged( location:Location )
         {
             var speedMS:Float = location.speed;
 
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity()
                 if( previousLocation != null )
                 {
                     //location.distanceTo doesn't take into account altitude
-                    var distance:Float  = location.distanceTo( previousLocation );
+                    var distance:Float  = location.distanceTo( previousLocation!! );
                     var time:Float      = ( location.elapsedRealtimeNanos - previousLocation!!.elapsedRealtimeNanos ) / 1000000000f;
                     speedMS             = distance / time;
                 }

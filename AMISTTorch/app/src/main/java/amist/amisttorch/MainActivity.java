@@ -1,9 +1,11 @@
 package amist.amisttorch;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.widget.ImageView;
@@ -56,7 +58,8 @@ public class MainActivity extends AppCompatActivity
         torchImage = ( ImageView ) findViewById( R.id.imageView );
     }
 
-	@Override
+	@SuppressLint("UnspecifiedRegisterReceiverFlag")
+    @Override
 	protected void onResume()
 	{
 		super.onResume();
@@ -68,7 +71,11 @@ public class MainActivity extends AppCompatActivity
 
 		IntentFilter filter = new IntentFilter();
         filter.addAction( TorchService.ACTION_UPDATE_ACTIVITY );
-        registerReceiver( notificationReceiver, filter );
+
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE )
+            registerReceiver( notificationReceiver, filter, RECEIVER_NOT_EXPORTED );
+        else
+            registerReceiver( notificationReceiver, filter );
 	}
 
 	@Override
@@ -76,6 +83,6 @@ public class MainActivity extends AppCompatActivity
 	{
         super.onPause();
 
-		unregisterReceiver( notificationReceiver );
+        unregisterReceiver( notificationReceiver );
     }
 }

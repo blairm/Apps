@@ -4,7 +4,11 @@
 
     <dist:module dist:instant="true" />
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
     <uses-permission android:name="android.permission.INSTANT_APP_FOREGROUND_SERVICE"/>
+
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -23,7 +27,9 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".TimerService" android:exported="false" />
+        <service android:name=".TimerService" android:exported="false" android:foregroundServiceType="specialUse" >
+            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE" android:value="timer"/>
+        </service>
     </application>
 
 </manifest>

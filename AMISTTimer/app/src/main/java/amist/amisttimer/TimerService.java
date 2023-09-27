@@ -123,17 +123,10 @@ public class TimerService extends Service implements Choreographer.FrameCallback
 
 		if( alarm != null )
 		{
-			if( android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP )
-			{
-				AudioAttributes.Builder builder = new AudioAttributes.Builder();
-				builder.setUsage( AudioAttributes.USAGE_ALARM );
-				AudioAttributes attributes = builder.build();
-				alarm.setAudioAttributes( attributes );
-			}
-			else
-			{
-				alarm.setStreamType( AudioManager.STREAM_ALARM );
-			}
+			AudioAttributes.Builder builder = new AudioAttributes.Builder();
+			builder.setUsage( AudioAttributes.USAGE_ALARM );
+			AudioAttributes attributes = builder.build();
+			alarm.setAudioAttributes( attributes );
 		}
 		//*/
 
@@ -147,22 +140,19 @@ public class TimerService extends Service implements Choreographer.FrameCallback
 			minVolume = 0;
 
 
-		if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O )
+		NotificationChannel notificationChannel = new NotificationChannel( NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_ID, NotificationManager.IMPORTANCE_LOW );
+		notificationChannel.enableLights( false );
+		notificationChannel.enableVibration( false );
+
+		NotificationManager notificationManager = ( NotificationManager ) getSystemService( Context.NOTIFICATION_SERVICE );
+
+		try
 		{
-			NotificationChannel notificationChannel = new NotificationChannel( NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_ID, NotificationManager.IMPORTANCE_LOW );
-			notificationChannel.enableLights( false );
-			notificationChannel.enableVibration( false );
-
-			NotificationManager notificationManager = ( NotificationManager ) getSystemService( Context.NOTIFICATION_SERVICE );
-
-			try
-			{
-				notificationManager.createNotificationChannel( notificationChannel );
-			}
-			catch( Exception exception )
-			{
-				Log.i( getString( R.string.app_name ), exception.toString() );
-			}
+			notificationManager.createNotificationChannel( notificationChannel );
+		}
+		catch( Exception exception )
+		{
+			Log.i( getString( R.string.app_name ), exception.toString() );
 		}
 	}
 
@@ -202,19 +192,15 @@ public class TimerService extends Service implements Choreographer.FrameCallback
 
 	public void createNotification()
 	{
-		if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O )
-			builder = new Notification.Builder( this, NOTIFICATION_CHANNEL_ID );
-		else
-			builder = new Notification.Builder( this );
-
-        builder.setSmallIcon( R.drawable.timer_notification_icon );
+		builder = new Notification.Builder( this, NOTIFICATION_CHANNEL_ID );
+		builder.setSmallIcon( R.drawable.timer_notification_icon );
         builder.setContentTitle( getString( R.string.app_name ) );
         builder.setContentText( MainActivity.getTimeString( totalTime ) );
 		builder.setOngoing( true );
 
 		Intent notificationIntent = new Intent( this, MainActivity.class );
 
-		PendingIntent pendingIntent = PendingIntent.getActivity( this, 0, notificationIntent, 0 );
+		PendingIntent pendingIntent = PendingIntent.getActivity( this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE );
 		builder.setContentIntent( pendingIntent );
 		startForeground( 1, builder.build() );
 	}

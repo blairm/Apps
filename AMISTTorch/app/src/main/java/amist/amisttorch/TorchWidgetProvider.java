@@ -32,7 +32,7 @@ public class TorchWidgetProvider extends AppWidgetProvider
 
 			Intent clickIntent = new Intent( context, TorchWidgetProvider.class );
 			clickIntent.setAction( ACTION_CLICK_WIDGET );
-			PendingIntent pendingIntent = PendingIntent.getBroadcast( context, 0, clickIntent, 0 );
+			PendingIntent pendingIntent = PendingIntent.getBroadcast( context, 0, clickIntent, PendingIntent.FLAG_IMMUTABLE );
 			views.setOnClickPendingIntent( R.id.widget_torch_switch, pendingIntent );
 
 			ComponentName componentName = new ComponentName( context, TorchWidgetProvider.class );
@@ -49,7 +49,7 @@ public class TorchWidgetProvider extends AppWidgetProvider
 
 			Intent clickIntent = new Intent( context, TorchWidgetProvider.class );
 			clickIntent.setAction( ACTION_CLICK_WIDGET );
-			PendingIntent pendingIntent = PendingIntent.getBroadcast( context, 0, clickIntent, 0 );
+			PendingIntent pendingIntent = PendingIntent.getBroadcast( context, 0, clickIntent, PendingIntent.FLAG_IMMUTABLE );
 			views.setOnClickPendingIntent( R.id.widget_torch_switch, pendingIntent );
 
 			ComponentName componentName = new ComponentName( context, TorchWidgetProvider.class );
@@ -75,7 +75,7 @@ public class TorchWidgetProvider extends AppWidgetProvider
 			
 			Intent intent = new Intent( context, TorchWidgetProvider.class );
 			intent.setAction( ACTION_CLICK_WIDGET );
-			PendingIntent pendingIntent = PendingIntent.getBroadcast( context, 0, intent, 0 );
+			PendingIntent pendingIntent = PendingIntent.getBroadcast( context, 0, intent, PendingIntent.FLAG_IMMUTABLE );
 			views.setOnClickPendingIntent( R.id.widget_torch_switch, pendingIntent );
 
 			appWidgetManager.updateAppWidget( appWidgetId, views );

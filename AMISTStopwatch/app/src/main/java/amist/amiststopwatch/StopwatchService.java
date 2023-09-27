@@ -8,7 +8,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
@@ -71,22 +70,19 @@ public class StopwatchService extends Service implements Choreographer.FrameCall
 	{
 		instance = this;
 
-		if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O )
+		NotificationChannel notificationChannel = new NotificationChannel( NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_ID, NotificationManager.IMPORTANCE_LOW );
+		notificationChannel.enableLights( false );
+		notificationChannel.enableVibration( false );
+
+		NotificationManager notificationManager = ( NotificationManager ) getSystemService( Context.NOTIFICATION_SERVICE );
+
+		try
 		{
-			NotificationChannel notificationChannel = new NotificationChannel( NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_ID, NotificationManager.IMPORTANCE_LOW );
-			notificationChannel.enableLights( false );
-			notificationChannel.enableVibration( false );
-
-			NotificationManager notificationManager = ( NotificationManager ) getSystemService( Context.NOTIFICATION_SERVICE );
-
-			try
-			{
-				notificationManager.createNotificationChannel( notificationChannel );
-			}
-			catch( Exception exception )
-			{
-				Log.i( getString( R.string.app_name ), exception.toString() );
-			}
+			notificationManager.createNotificationChannel( notificationChannel );
+		}
+		catch( Exception exception )
+		{
+			Log.i( getString( R.string.app_name ), exception.toString() );
 		}
 	}
 
@@ -120,11 +116,7 @@ public class StopwatchService extends Service implements Choreographer.FrameCall
 
 	public void createNotification()
 	{
-		if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O )
-			builder = new Notification.Builder( this, NOTIFICATION_CHANNEL_ID );
-		else
-			builder = new Notification.Builder( this );
-
+		builder = new Notification.Builder( this, NOTIFICATION_CHANNEL_ID );
         builder.setSmallIcon( R.drawable.stopwatch_notification_icon );
         builder.setContentTitle( getString( R.string.app_name ) );
         builder.setContentText( MainActivity.getTimeString( totalTime ) );
@@ -132,7 +124,7 @@ public class StopwatchService extends Service implements Choreographer.FrameCall
 
 		Intent notificationIntent = new Intent( this, MainActivity.class );
 
-		PendingIntent pendingIntent = PendingIntent.getActivity( this, 0, notificationIntent, 0 );
+		PendingIntent pendingIntent = PendingIntent.getActivity( this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE );
 		builder.setContentIntent( pendingIntent );
 		startForeground( 1, builder.build() );
 	}
@@ -157,7 +149,7 @@ public class StopwatchService extends Service implements Choreographer.FrameCall
 	public void destroyNotification()
 	{
 		builder = null;
-		stopForeground( true );
+		stopForeground( STOP_FOREGROUND_REMOVE );
 	}
 
 	public void doFrame( long frameTimeNanos )

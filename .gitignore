@@ -56,5 +56,4 @@ Temporary Items
 .externalNativeBuild
 .cxx
 *.aab
-*.apk
 *.sublime-workspace

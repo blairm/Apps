@@ -103,6 +103,7 @@ class MainActivity : AppCompatActivity()
         }
 
         //deprecated in api 29 but have to keep this here
+        @Deprecated("")
         override fun onStatusChanged( provider:String,
                                       status:Int,
                                       extras:Bundle ) {}

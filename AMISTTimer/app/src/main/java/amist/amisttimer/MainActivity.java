@@ -1,19 +1,14 @@
 package amist.amisttimer;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.media.AudioManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.Choreographer;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,7 +16,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.NumberPicker;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -202,54 +196,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		}
 	}
 
-	@Override
-	public boolean onOptionsItemSelected( MenuItem item )
-	{
-		switch( item.getItemId() )
-		{
-			case R.id.set_volume:
-				AlertDialog.Builder builder = new AlertDialog.Builder( this, R.style.AlertDialogTheme );
-				volumePicker.setProgress( TimerService.getVolume() );
-				builder.setView( dialogVolumePickerView );
-				builder.setTitle( R.string.volume_picker_title );
-
-				builder.setPositiveButton( R.string.positive_text, new DialogInterface.OnClickListener()
-				{
-					@Override
-					public void onClick( DialogInterface dialog, int value )
-					{
-						int volume = volumePicker.getProgress();
-						TimerService.setVolume( volume );
-					}
-				} );
-
-				builder.setNegativeButton( R.string.negative_text, new DialogInterface.OnClickListener()
-				{
-					@Override
-					public void onClick( DialogInterface dialog, int value ) {}
-				} );
-
-				builder.setOnDismissListener( new DialogInterface.OnDismissListener()
-				{
-					@Override
-					public void onDismiss( DialogInterface dialog )
-					{
-						if( dialogVolumePickerView != null )
-						{
-							ViewGroup dialogParent = ( ViewGroup ) dialogVolumePickerView.getParent();
-
-							if( dialogParent != null )
-								dialogParent.removeView( dialogVolumePickerView );
-						}
-					}
-				} );
-
-				builder.show();
-				return true;
-		}
-
-		return super.onOptionsItemSelected( item );
-	}
 
 	@Override
 	public void doFrame( long frameTimeNanos )
@@ -292,14 +238,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	{
 		super.onCreate( savedInstanceState );
 
-		AudioManager audioManager = ( AudioManager ) getSystemService( Context.AUDIO_SERVICE );
-		maxVolume = audioManager.getStreamMaxVolume( AudioManager.STREAM_ALARM );
-
-		if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.P )
-			minVolume = audioManager.getStreamMinVolume( AudioManager.STREAM_ALARM );
-		else
-			minVolume = 0;
-
 		setupActivityLayout();
 
 		//*check for saved timers and volume, load if found
@@ -313,20 +251,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				long value = preferences.getLong( RECENT_TIMER_ID + i, 0 );
 				recentTimerList.add( value );
 			}
-
-			int defaultVolume = audioManager.getStreamVolume( AudioManager.STREAM_ALARM );
-			int volume = preferences.getInt( VOLUME_ID, defaultVolume );
-			TimerService.setVolume( volume );
 		}
 		//*/
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu( Menu menu )
-	{
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate( R.menu.menu, menu );
-		return true;
 	}
 
 	@Override
@@ -352,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 		Choreographer.getInstance().removeFrameCallback( this );
 
-		//*save recent timers and volume
+		//*save recent timers
 		SharedPreferences preferences = getPreferences( MODE_PRIVATE );
 		if( preferences != null )
 		{
@@ -364,9 +290,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 				for( int i = 0; i < count; ++i )
 					editor.putLong( RECENT_TIMER_ID + i, recentTimerList.get( i ) );
-
-				int volume = TimerService.getVolume();
-				editor.putInt( VOLUME_ID, volume );
 
 				editor.commit();
 			}
@@ -389,10 +312,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	private ArrayList< Long >	recentTimerList			= new ArrayList< Long >();
 	private int					recentTimerListMaxCount	= 15;
 
-	private View				dialogVolumePickerView;
-	private SeekBar				volumePicker;
-	private int					maxVolume;
-	private int					minVolume;
 
 	private void setupActivityLayout()
 	{
@@ -438,14 +357,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		secondPicker.setMinValue( 0 );
 		secondPicker.setDescendantFocusability( NumberPicker.FOCUS_BLOCK_DESCENDANTS );
 		setNumberPickerDividerColor( secondPicker, getResources().getColor( R.color.numberPickerDividerColour ) );
-
-
-		dialogVolumePickerView	= inflater.inflate( R.layout.dialog_volume_picker, null );
-		volumePicker			= ( SeekBar ) dialogVolumePickerView.findViewById( R.id.seekBar );
-		volumePicker.setMax( maxVolume );
-
-		if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.O )
-			volumePicker.setMin( minVolume );
 	}
 
 	private void updateActivity()

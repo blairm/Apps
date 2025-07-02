@@ -6,7 +6,6 @@
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
-    <uses-permission android:name="android.permission.INSTANT_APP_FOREGROUND_SERVICE"/>
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 

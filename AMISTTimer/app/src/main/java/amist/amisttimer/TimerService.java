@@ -8,12 +8,10 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioAttributes;
-import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Binder;
-import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.util.Log;
@@ -70,18 +68,6 @@ public class TimerService extends Service implements Choreographer.FrameCallback
 		return pickedTime;
 	}
 
-	public static void setVolume( int newVolume )
-	{
-		volume = newVolume;
-
-		if( instance != null )
-			instance.setStreamVolumeIfPlaying();
-	}
-
-	public static int getVolume()
-	{
-		return volume;
-	}
 	
 	public static void reset()
 	{
@@ -129,15 +115,6 @@ public class TimerService extends Service implements Choreographer.FrameCallback
 			alarm.setAudioAttributes( attributes );
 		}
 		//*/
-
-
-		audioManager	= ( AudioManager ) getSystemService( Context.AUDIO_SERVICE );
-		maxVolume		= audioManager.getStreamMaxVolume( AudioManager.STREAM_ALARM );
-
-		if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.P )
-			minVolume = audioManager.getStreamMinVolume( AudioManager.STREAM_ALARM );
-		else
-			minVolume = 0;
 
 
 		NotificationChannel notificationChannel = new NotificationChannel( NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_ID, NotificationManager.IMPORTANCE_LOW );
@@ -245,12 +222,7 @@ public class TimerService extends Service implements Choreographer.FrameCallback
 				Intent serviceIntent = new Intent( this, MainActivity.class );
 				serviceIntent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP );
 				startActivity( serviceIntent );
-
-				defaultVolume = audioManager.getStreamVolume( AudioManager.STREAM_ALARM );
-				setStreamVolume( volume );
 			}
-
-			volume = audioManager.getStreamVolume( AudioManager.STREAM_ALARM );
 
 			if( alarm != null && !alarm.isPlaying() )
 			{
@@ -265,12 +237,6 @@ public class TimerService extends Service implements Choreographer.FrameCallback
 		updateNotification();
 	}
 
-	public void setStreamVolumeIfPlaying()
-	{
-		if( isAlarmPlaying )
-			setStreamVolume( volume );
-	}
-
 
 	private final IBinder binder = new LocalBinder();
 
@@ -280,33 +246,12 @@ public class TimerService extends Service implements Choreographer.FrameCallback
 	private boolean isAlarmPlaying;
 
 
-	private AudioManager audioManager;
-	private static int volume;
-	private int	defaultVolume;
-	private int	maxVolume;
-	private int	minVolume;
-
-
 	private void stopAlarm()
 	{
 		if( alarm != null )
 		{
 			alarm.stop();
 			isAlarmPlaying = false;
-
-			setStreamVolume( defaultVolume );
-		}
-	}
-
-	private void setStreamVolume( int volume )
-	{
-		try
-		{
-			audioManager.setStreamVolume( AudioManager.STREAM_ALARM, volume, 0 );
-		}
-		catch( Exception exception )
-		{
-			Log.i( getString( R.string.app_name ), exception.toString() );
 		}
 	}
 }

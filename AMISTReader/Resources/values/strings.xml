@@ -1,0 +1,48 @@
+<resources>
+    <string name="app_name">AMIST Reader</string>
+	
+	<string name="OverflowMarkAllAsRead">Mark all as read</string>
+	<string name="OverflowSettings">Settings</string>
+	<string name="OverflowMarkAsUnread">Mark as unread</string>
+
+	<string name="NavigationDrawerHeader">Long press your feeds for more options</string>
+	<string name="SideMenuAddFeed">Add feed</string>
+	<string name="SideMenuReorder">Reorder feeds</string>
+	<string name="SideMenuSettings">Settings</string>
+	<string name="AllFeedsTitle">All feeds</string>
+
+	<string name="DialogAddFeed">Add feed</string>
+	<string name="DialogAddFeedEdit">Edit feed</string>
+	<string name="DialogAddFeedTitle">Title</string>
+	<string name="DialogAddFeedURL">URL</string>
+	<string name="DialogAddFeedOK">OK</string>
+	<string name="DialogAddFeedCancel">Cancel</string>
+
+	<string name="ContextMyFeedsEdit">Edit feed</string>
+	<string name="ContextMyFeedsDelete">Delete feed</string>
+
+	<string name="FeedFailedToLoad">\u0020failed to load</string>
+	<string name="UnknownFeedFailedToLoad">Feed failed to load</string>
+
+	<string name="Reorder">Reorder feeds</string>
+	<string name="MyFeedsListKey">MyFeedsList</string>
+
+	<string name="Settings">Settings</string>
+	<string name="SettingsMaxItemsPerFeed">Max items per feed</string>
+	<string name="SettingsMaxItemsPerFeedKey">MaxItemsPerFeed</string>
+	<string name="SettingsOpenLinkAutomatically">Open link automatically</string>
+	<string name="SettingsOpenLinkAutomaticallyKey">OpenLinkAutomatically</string>
+	<string name="SettingsEnableJS">Enable Javascript in webview</string>
+	<string name="SettingsEnableJSKey">EnableJS</string>
+	<string name="SettingsOpenLinkInBrowser">Open link in browser</string>
+	<string name="SettingsOpenLinkInBrowserKey">OpenLinkInBrowser</string>
+
+	<string name="NewsItem">News Item</string>
+	<string name="NewsItemIndexKey">NewsItemIndex</string>
+	<string name="NewsItemTitleKey">NewsItemTitle</string>
+	<string name="NewsItemDescKey">NewsItemDesc</string>
+	<string name="NewsItemHasReadKey">NewsItemHasRead</string>
+	<string name="NewsItemLinkKey">NewsItemLink</string>
+
+	<string name="NotConnectedMessage">Not connected to network</string>
+</resources>

@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical"
+		android:fitsSystemWindows="true">
+
+	<com.google.android.material.appbar.AppBarLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<androidx.appcompat.widget.Toolbar
+			android:id="@+id/Toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical">
+
+				<TextView
+					style="@style/TextAppearance.AppCompat.Title"
+                    android:id="@+id/ToolbarTitle"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="left"
+					android:text="@string/Settings"
+					android:textColor="@color/TextWhite"
+					android:textSize="22sp"
+					android:maxLines="1"
+					android:singleLine="true"/>
+
+			</LinearLayout>
+
+		</androidx.appcompat.widget.Toolbar>
+	</com.google.android.material.appbar.AppBarLayout>
+
+	<TextView
+		android:id="@+id/Content"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:textColor="@color/TextWhite"
+		android:textSize="16sp"
+        android:padding="16dp"/>
+
+</LinearLayout>

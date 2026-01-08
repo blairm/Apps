@@ -1,0 +1,4 @@
+*/*.apk
+.vs
+bin
+obj

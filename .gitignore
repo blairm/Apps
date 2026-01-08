@@ -57,3 +57,4 @@ Temporary Items
 .cxx
 *.aab
 *.sublime-workspace
+*.user

@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical"
+		android:fitsSystemWindows="true">
+
+	<com.google.android.material.appbar.AppBarLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<androidx.appcompat.widget.Toolbar
+			android:id="@+id/Toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical">
+
+				<TextView
+					style="@style/TextAppearance.AppCompat.Title"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:gravity="left"
+					android:text="@string/Settings"
+					android:textColor="@color/TextWhite"
+					android:textSize="22sp"/>
+
+			</LinearLayout>
+
+		</androidx.appcompat.widget.Toolbar>
+	</com.google.android.material.appbar.AppBarLayout>
+
+	<LinearLayout
+		android:id="@+id/MaxItemsPerFeed"
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="16dp">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="@string/SettingsMaxItemsPerFeed"
+			android:textColor="@color/TextWhite"
+			android:textSize="20sp" />
+
+		<TextView
+			android:id="@+id/MaxItemsPerFeedCount"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textColor="@color/TextWhite"
+			android:textSize="16sp" />
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="16dp">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="@string/SettingsOpenLinkAutomatically"
+			android:textColor="@color/TextWhite"
+			android:textSize="20sp" />
+
+		<Switch
+			android:id="@+id/SettingsOpenLinkAutomatically"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="16dp">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="@string/SettingsEnableJS"
+			android:textColor="@color/TextWhite"
+			android:textSize="20sp" />
+
+		<Switch
+			android:id="@+id/SettingsEnableJS"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+	</LinearLayout>
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="16dp">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="@string/SettingsOpenLinkInBrowser"
+			android:textColor="@color/TextWhite"
+			android:textSize="20sp" />
+
+		<Switch
+			android:id="@+id/SettingsOpenLinkInBrowser"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"/>
+	</LinearLayout>
+
+</LinearLayout>

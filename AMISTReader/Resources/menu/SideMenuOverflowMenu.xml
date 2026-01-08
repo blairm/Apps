@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<item
+        android:id="@+id/SideMenuAddFeed"
+        android:title="@string/SideMenuAddFeed"/>
+
+	<item
+        android:id="@+id/SideMenuReorder"
+        android:title="@string/SideMenuReorder"/>
+
+	<item
+        android:id="@+id/SideMenuSettings"
+        android:title="@string/SideMenuSettings"/>
+
+</menu>

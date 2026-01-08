@@ -1,5 +1,8 @@
 # Apps
 
+# AMISTReader
+Android RSS reader app
+
 # AMISTSpeed
 Android speedometer app
 

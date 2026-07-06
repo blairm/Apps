@@ -62,10 +62,10 @@ namespace AMISTReader
             myFeedsAdapter = new( [], OnFeedSelected );
             myFeedsRecyclerView?.SetAdapter( myFeedsAdapter );
 
-            appDBHelper = new();
+            appDBHelper = new( this );
             appDBHelper.CreateMyFeedsTable().ContinueWith( results =>
             {
-                if( results.Result == SQLite.CreateTableResult.Migrated )
+                if( results.Result.result == CreateTableResult.Success )
                 {
                     appDBHelper.GetMyFeedsAsync().ContinueWith( results =>
                     {
@@ -94,7 +94,7 @@ namespace AMISTReader
 
             appDBHelper.CreateFeedItemTable().ContinueWith( results =>
             {
-                if( results.Result == SQLite.CreateTableResult.Migrated )
+                if( results.Result.result == CreateTableResult.Success )
                 {
                     //@NOTE uncomment to clear FeedItems table
                     //appDBHelper.DeleteAllFeedItemsAsync().Wait();
@@ -277,15 +277,17 @@ namespace AMISTReader
                         for( int i = 0; i < newsAdapter.items.Count; ++i )
                             newsAdapter.items[ i ].hasBeenRead = true;
 
-                        appDBHelper?.UpdateFeedItemAsync( newsAdapter.items ).ContinueWith( results =>
+                        if( myFeedsAdapter != null )
                         {
-                            RunOnUiThread( () =>
+                            int feedUid = currFeed == -1 ? currFeed : myFeedsAdapter.items[ currFeed ].uid;
+                            appDBHelper?.MarkAllAsRead( feedUid ).ContinueWith( results =>
                             {
-                                newsAdapter.NotifyDataSetChanged();
-                            } );
+                                RunOnUiThread( () =>
+                                {
+                                    newsAdapter.NotifyDataSetChanged();
+                                } );
 
-                            if( myFeedsAdapter != null )
-                            {
+                            
                                 int startIndex = 0;
                                 int endIndex = myFeedsAdapter.items.Count;
 
@@ -305,8 +307,8 @@ namespace AMISTReader
                                         myFeedsAdapter.NotifyDataSetChanged();
                                     } );
                                 } );
-                            }
-                        } );
+                            } );
+                        }
                     }
                     return true;
                 case Resource.Id.OverflowSettings:
@@ -400,12 +402,8 @@ namespace AMISTReader
                                         appDBHelper?.UpdateMyFeedsItemAsync( itemsToUpdate ).Wait();
                                     }
 
-                                    appDBHelper?.GetFeedItemAsync( itemToDelete.uid ).ContinueWith( results =>
+                                    appDBHelper?.DeleteAllFeedItemsAsync( itemToDelete ).ContinueWith( results =>
                                     {
-                                        List< FeedItem > items = results.Result;
-                                        for( int i = 0; i < items.Count; ++i )
-                                            appDBHelper?.DeleteFeedItemAsync( items[ i ] ).Wait();
-
                                         RunOnUiThread( () =>
                                         {
                                             for( int i = 0; i < newsAdapter?.items.Count; ++i )

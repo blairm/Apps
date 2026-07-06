@@ -13,16 +13,26 @@
       To learn more, see: https://learn.microsoft.com/dotnet/core/deploying/trimming/trimming-options#trimming-granularity
     -->
     <TrimMode>full</TrimMode>
+    <AndroidSigningKeyStore></AndroidSigningKeyStore>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <AndroidPackageFormat>apk</AndroidPackageFormat>
     <PublishTrimmed>True</PublishTrimmed>
     <RunAOTCompilation>True</RunAOTCompilation>
     <Optimize>True</Optimize>
+    <AndroidKeyStore>False</AndroidKeyStore>
+    <AndroidSigningKeyAlias></AndroidSigningKeyAlias>
+    <AndroidSigningKeyPass></AndroidSigningKeyPass>
+    <AndroidSigningStorePass></AndroidSigningStorePass>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AndroidKeyStore>False</AndroidKeyStore>
+    <AndroidSigningKeyAlias></AndroidSigningKeyAlias>
+    <AndroidSigningKeyPass></AndroidSigningKeyPass>
+    <AndroidSigningStorePass></AndroidSigningStorePass>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CodeHollow.FeedReader" Version="1.2.6" />
-    <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
     <PackageReference Include="Xamarin.AndroidX.AppCompat" Version="1.7.1.1" />
     <PackageReference Include="Xamarin.AndroidX.SwipeRefreshLayout" Version="1.2.0" />
     <PackageReference Include="Xamarin.Google.Android.Material" Version="1.13.0" />

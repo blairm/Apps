@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">AMIST Level</string>
+    <string name="BubbleLevel">Bubble Level</string>
+    <string name="LaserLevel">Laser Level</string>
+    <string name="OverflowContentDescription">More</string>
+    <string name="OverflowDegrees">Degrees</string>
+    <string name="OverflowPercent">Percent</string>
+    <string name="SymbolDegrees">°</string>
+    <string name="SymbolPercent">%</string>
+</resources>
